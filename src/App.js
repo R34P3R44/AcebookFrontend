@@ -18,17 +18,19 @@ let post2 = {
   created_at: '13/11/2020 12:31:32'
 }
 
-let posts = [post2, post1]
-
 function App() {
   return (
     <div className="App">
       <Header />
       <SigninForm />
       <NewPostForm />
-      <PostList posts={posts} />
+      <PostList posts={getPosts()} />
     </div>
   );
+}
+
+function getPosts() {
+  return [post2, post1]
 }
 
 export default App;
