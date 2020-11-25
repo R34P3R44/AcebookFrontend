@@ -15,7 +15,7 @@ class PostList extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:1234/api/v1/posts/3", {
+    fetch("http://localhost:1234/api/v1/posts", {
       method: 'GET',
       headers: new Headers({
         'Authorization': 'Basic ' + btoa(username + ':' + password)
@@ -26,7 +26,7 @@ class PostList extends React.Component {
         (result) => {
           this.setState({
             isLoaded: true,
-            posts: result
+            posts: result.posts
           });
         }
       )
@@ -41,10 +41,9 @@ class PostList extends React.Component {
     } else {
       return (
         <div className="post-list" >
-          {/* {posts.map((post) =>
+          {posts.map((post) =>
             <Post data={post} key={post.id} />
-          )} */}
-          <Post data={posts} key={posts.id} />
+          )}
         </div>
       )
     }
