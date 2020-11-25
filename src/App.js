@@ -1,7 +1,8 @@
-import PostList from './PostList.js'
-import Header from './Header.js'
-import SigninForm from './SigninForm.js'
-import NewPostForm from './NewPostForm.js'
+import React from 'react';
+import PostList from './PostList.js';
+import Header from './Header.js';
+import SigninForm from './SigninForm.js';
+import NewPostForm from './NewPostForm.js';
 import './App.css';
 
 let post1 = {
@@ -18,15 +19,36 @@ let post2 = {
   created_at: '13/11/2020 12:31:32'
 }
 
-function App() {
-  return (
-    <div className="App">
-      <Header />
-      <SigninForm />
-      <NewPostForm />
-      <PostList posts={getPosts()} />
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedIn: false
+    };
+
+    this.setLoggedIn = this.setLoggedIn.bind(this)
+  }
+
+  setLoggedIn() {
+    this.setState({
+      loggedIn: true
+    })
+  }
+
+  render() {
+    let postList = ''
+    if (this.state.loggedIn) {
+      postList = <PostList posts={getPosts()} />
+    }
+    return (
+      <div className="App">
+        <Header />
+        <SigninForm setLoggedIn={this.setLoggedIn} />
+        <NewPostForm />
+        {postList}
+      </div>
+    )
+  }
 }
 
 function getPosts() {

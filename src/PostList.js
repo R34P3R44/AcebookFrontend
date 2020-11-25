@@ -1,8 +1,5 @@
 import React from 'react';
-import Post from './Post.js'
-
-let username = 'ds.danielh'
-let password = 'hunter2'
+import Post from './Post.js';
 
 class PostList extends React.Component {
   constructor(props) {
@@ -16,10 +13,7 @@ class PostList extends React.Component {
 
   componentDidMount() {
     fetch("http://localhost:1234/api/v1/posts", {
-      method: 'GET',
-      headers: new Headers({
-        'Authorization': 'Basic ' + btoa(username + ':' + password)
-      })
+      method: 'GET'
     })
       .then(res => res.json())
       .then(
@@ -30,6 +24,7 @@ class PostList extends React.Component {
           });
         }
       )
+      .catch(err => console.log(err))
   }
 
   render() {

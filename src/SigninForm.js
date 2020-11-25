@@ -22,13 +22,14 @@ class SigninForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert(`Submitted! Username: ${this.state.username}. Password: ${this.state.password}`)
+    login(this.state.username, this.state.password)
+      .then(this.props.setLoggedIn)
     event.preventDefault();
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} >
         <label>
           Username:
           <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
@@ -41,6 +42,22 @@ class SigninForm extends React.Component {
       </form>
     )
   }
+}
+
+async function login(username, password) {
+  // Default options are marked with *
+  console.log(JSON.stringify({ username: username, password: password }))
+  const response = await fetch("http://localhost:1234/api/v1/sessions", {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username: username, password: password })
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
 }
 
 export default SigninForm;
