@@ -2,7 +2,6 @@ import React from 'react';
 import PostList from './PostList.js';
 import Header from './Header.js';
 import SignInForm from './SignInForm.js';
-import NewPostForm from './NewPostForm.js';
 import './App.css'
 import * as Cookies from 'js-cookie';
 
@@ -92,10 +91,8 @@ class App extends React.Component {
   render() {
     let signInForm = '';
     let signOutButton = '';
-    let newPostForm = '';
     if (this.state.user.authCompleted && this.state.user.valid) {
       signOutButton = <button onClick={this.signOut}>Sign out</button>
-      newPostForm = <NewPostForm />
     } else {
       signInForm = <SignInForm setSignedIn={this.setSignedIn} />
     }
@@ -105,7 +102,6 @@ class App extends React.Component {
         <Header />
         {signInForm}
         {signOutButton}
-        {newPostForm}
         <PostList user={this.state.user} />
       </div>
     )

@@ -1,5 +1,6 @@
 import React from 'react';
 import Post from './Post.js';
+import NewPostForm from './NewPostForm.js';
 import * as Cookies from 'js-cookie';
 
 class PostList extends React.Component {
@@ -49,16 +50,23 @@ class PostList extends React.Component {
 
   render() {
     const { error, isLoaded, posts } = this.state;
+    let newPostForm = '';
+    if (this.props.user.authCompleted && this.props.user.valid) {
+      newPostForm = <NewPostForm loadPosts={this.loadPosts} />
+    }
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {
       return (
-        <div className="post-list" >
-          {posts.map((post) =>
-            <Post data={post} user={this.props.user} loadPosts={this.loadPosts} key={post.id} />
-          )}
+        <div>
+          {newPostForm}
+          <div className="post-list" >
+            {posts.map((post) =>
+              <Post data={post} user={this.props.user} loadPosts={this.loadPosts} key={post.id} />
+            )}
+          </div>
         </div>
       )
     }
