@@ -8,8 +8,7 @@ class PostList extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      posts: [],
-      user: this.props.user
+      posts: []
     };
   }
 
@@ -46,7 +45,7 @@ class PostList extends React.Component {
       return (
         <div className="post-list" >
           {posts.map((post) =>
-            <Post data={post} user={this.state.user} key={post.id} />
+            <Post data={post} user={this.props.user} key={post.id} />
           )}
         </div>
       )
