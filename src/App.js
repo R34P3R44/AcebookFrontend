@@ -88,19 +88,35 @@ class App extends React.Component {
     })
   }
 
+  handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+  }
+
+  // signUpLink() {
+  //   return (
+  //     <a href="#users/new" onClick={this.handleClick}>
+  //       Sign up
+  //     </a>
+  //   );
+  // }
+
   render() {
     let signInForm = '';
     let signOutButton = '';
+    let signUpLink = '';
     if (this.state.user.authCompleted && this.state.user.valid) {
       signOutButton = <button onClick={this.signOut}>Sign out</button>
     } else {
       signInForm = <SignInForm setSignedIn={this.setSignedIn} />
+      signUpLink = <a href="#users/new" onClick={this.handleClick}>Sign up</a>
     }
 
     return (
       <div className="App">
         <Header />
         {signInForm}
+        {signUpLink}
         {signOutButton}
         <PostList user={this.state.user} />
       </div>
