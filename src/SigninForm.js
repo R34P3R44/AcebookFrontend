@@ -1,6 +1,6 @@
 import React from 'react';
 
-class SigninForm extends React.Component {
+class signInForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,8 +27,8 @@ class SigninForm extends React.Component {
       username: this.state.username,
       password: this.state.password
     }
-    login(data)
-      .then(res => this.props.setLoggedIn(res))
+    signIn(data)
+      .then(res => this.props.setSignedIn(res))
   }
 
   render() {
@@ -42,13 +42,13 @@ class SigninForm extends React.Component {
           Password:
           <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
         </label>
-        <input type="submit" value="Signin" />
+        <input type="submit" value="Sign in" />
       </form>
     )
   }
 }
 
-async function login(data) {
+async function signIn(data) {
   const response = await fetch("http://localhost:1234/api/v1/sessions", {
     method: 'POST',
     mode: 'cors',
@@ -61,4 +61,4 @@ async function login(data) {
   return response.json();
 }
 
-export default SigninForm;
+export default signInForm;

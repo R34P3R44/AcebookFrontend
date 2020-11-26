@@ -8,13 +8,13 @@ class PostList extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      posts: []
+      posts: [],
+      user: this.props.user
     };
   }
 
   componentDidMount() {
     let token = Cookies.get("acebookSession")
-    console.log(token)
     fetch("http://localhost:1234/api/v1/posts", {
       method: 'GET',
       headers: {
@@ -46,7 +46,7 @@ class PostList extends React.Component {
       return (
         <div className="post-list" >
           {posts.map((post) =>
-            <Post data={post} key={post.id} />
+            <Post data={post} user={this.state.user} key={post.id} />
           )}
         </div>
       )

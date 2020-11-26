@@ -1,7 +1,7 @@
 import React from 'react';
 import PostList from './PostList.js';
 import Header from './Header.js';
-import SigninForm from './SigninForm.js';
+import SignInForm from './SignInForm.js';
 import NewPostForm from './NewPostForm.js';
 import './App.css'
 import * as Cookies from 'js-cookie';
@@ -10,7 +10,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
+      SignedIn: false,
       user: {
         current: {},
         valid: true,
@@ -19,16 +19,16 @@ class App extends React.Component {
       }
     };
 
-    this.setLoggedIn = this.setLoggedIn.bind(this)
+    this.setSignedIn = this.setSignedIn.bind(this)
     this.authUser = this.authUser.bind(this)
+    this.signOut = this.signOut.bind(this)
   }
 
   componentDidMount() {
     this.authUser()
   }
 
-  setLoggedIn(jsonData) {
-    console.log(jsonData)
+  setSignedIn(jsonData) {
     Cookies.remove('acebookSession');
     Cookies.set('acebookSession', jsonData.token, { expires: 14 });
     this.setState({
@@ -76,20 +76,37 @@ class App extends React.Component {
     }
   }
 
+  signOut() {
+    Cookies.remove('acebookSession');
+    this.setState({
+      SignedIn: false,
+      user: {
+        current: {},
+        valid: true,
+        authCompleted: false,
+        errors: {}
+      }
+    })
+  }
+
   render() {
-    let postList = ''
-    console.log(this.state.user.authCompleted)
-    console.log(this.state.user.valid)
-    console.log('--')
+    let signInForm = '';
+    let signOutButton = '';
+    let newPostForm = '';
     if (this.state.user.authCompleted && this.state.user.valid) {
-      postList = <PostList />
+      signOutButton = <button onClick={this.signOut}>Sign out</button>
+      newPostForm = <NewPostForm />
+    } else {
+      signInForm = <SignInForm setSignedIn={this.setSignedIn} />
     }
+
     return (
       <div className="App">
         <Header />
-        <SigninForm setLoggedIn={this.setLoggedIn} />
-        <NewPostForm />
-        {postList}
+        {signInForm}
+        {signOutButton}
+        {newPostForm}
+        <PostList user={this.state.user} />
       </div>
     )
   }
