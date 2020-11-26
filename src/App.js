@@ -2,6 +2,7 @@ import React from 'react';
 import PostList from './PostList.js';
 import Header from './Header.js';
 import SignInForm from './SignInForm.js';
+import SignUpForm from './SignUpForm.js';
 import './App.css'
 import * as Cookies from 'js-cookie';
 
@@ -10,6 +11,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       SignedIn: false,
+      SigningUp: false,
       user: {
         current: {},
         valid: true,
@@ -21,6 +23,7 @@ class App extends React.Component {
     this.setSignedIn = this.setSignedIn.bind(this)
     this.authUser = this.authUser.bind(this)
     this.signOut = this.signOut.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount() {
@@ -90,37 +93,41 @@ class App extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-    console.log('The link was clicked.');
+    this.setState({
+      SigningUp: true
+    })
+    // return <SignUpForm setSignedIn={this.setSignedIn} />
   }
 
-  // signUpLink() {
-  //   return (
-  //     <a href="#users/new" onClick={this.handleClick}>
-  //       Sign up
-  //     </a>
-  //   );
-  // }
-
   render() {
-    let signInForm = '';
-    let signOutButton = '';
-    let signUpLink = '';
-    if (this.state.user.authCompleted && this.state.user.valid) {
-      signOutButton = <button onClick={this.signOut}>Sign out</button>
-    } else {
-      signInForm = <SignInForm setSignedIn={this.setSignedIn} />
-      signUpLink = <a href="#users/new" onClick={this.handleClick}>Sign up</a>
-    }
+    if (this.state.SigningUp === false){
+      let signInForm = '';
+      let signOutButton = '';
+      let signUpLink = '';
+      if (this.state.user.authCompleted && this.state.user.valid) {
+        signOutButton = <button onClick={this.signOut}>Sign out</button>
+      } else {
+        signInForm = <SignInForm setSignedIn={this.setSignedIn} />
+        signUpLink = <a href="#users/new" onClick={this.handleClick}>Sign up</a>
+      }
 
-    return (
-      <div className="App">
-        <Header />
-        {signInForm}
-        {signUpLink}
-        {signOutButton}
-        <PostList user={this.state.user} />
-      </div>
-    )
+      return (
+        <div className="App">
+          <Header />
+          {signInForm}
+          {signUpLink}
+          {signOutButton}
+          <PostList user={this.state.user} />
+        </div>
+      )
+    } else {
+      return (
+        <div className="App">
+          <Header />
+          <SignUpForm setSignedIn={this.setSignedIn} />
+        </div>
+      )
+    }
   }
 }
 
