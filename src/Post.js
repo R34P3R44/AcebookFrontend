@@ -7,11 +7,11 @@ class Post extends React.Component {
     return date.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*/, '$3-$2-$1 $4:$5:$6')
   }
 
-  edit(){
-    
+  edit() {
+
   }
 
-  delete(post_id){
+  delete(post_id) {
     let token = Cookies.get("acebookSession")
     fetch("http://localhost:1234/api/v1/posts/" + post_id, {
       method: 'DELETE',
@@ -22,6 +22,7 @@ class Post extends React.Component {
       },
       credentials: 'include'
     })
+      .then(this.props.loadPosts)
   }
 
   render() {

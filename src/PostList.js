@@ -10,9 +10,15 @@ class PostList extends React.Component {
       isLoaded: false,
       posts: []
     };
+
+    this.loadPosts = this.loadPosts.bind(this)
   }
 
   componentDidMount() {
+    this.loadPosts()
+  }
+
+  loadPosts() {
     let token = Cookies.get("acebookSession")
     fetch("http://localhost:1234/api/v1/posts", {
       method: 'GET',
@@ -35,6 +41,12 @@ class PostList extends React.Component {
       .catch(err => console.log(err))
   }
 
+  setLoaded(value) {
+    this.setState({
+      isLoaded: value
+    })
+  }
+
   render() {
     const { error, isLoaded, posts } = this.state;
     if (error) {
@@ -45,7 +57,7 @@ class PostList extends React.Component {
       return (
         <div className="post-list" >
           {posts.map((post) =>
-            <Post data={post} user={this.props.user} key={post.id} />
+            <Post data={post} user={this.props.user} loadPosts={this.loadPosts} key={post.id} />
           )}
         </div>
       )
