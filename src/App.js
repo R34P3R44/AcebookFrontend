@@ -4,6 +4,10 @@ import Header from './Header.js';
 import SigninForm from './SigninForm.js';
 import NewPostForm from './NewPostForm.js';
 import './App.css';
+const axios = require('axios').default;
+axios.defaults.xsrfCookieName = "CSRF-TOKEN";
+axios.defaults.xsrfHeaderName = "X-CSRF-Token";
+axios.defaults.withCredentials = true;
 
 let post1 = {
   id: 1,

@@ -1,5 +1,9 @@
 import React from 'react';
 import Post from './Post.js';
+const axios = require('axios').default;
+axios.defaults.xsrfCookieName = "CSRF-TOKEN";
+axios.defaults.xsrfHeaderName = "X-CSRF-Token";
+axios.defaults.withCredentials = true;
 
 class PostList extends React.Component {
   constructor(props) {
@@ -12,9 +16,8 @@ class PostList extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:1234/api/v1/posts", {
-      method: 'GET'
-    })
+    axios
+      .get("http://localhost:1234/api/v1/posts")
       .then(res => res.json())
       .then(
         (result) => {

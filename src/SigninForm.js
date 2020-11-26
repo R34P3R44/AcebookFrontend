@@ -22,7 +22,11 @@ class SigninForm extends React.Component {
   }
 
   handleSubmit(event) {
-    login(this.state.username, this.state.password)
+    let data = {
+      username: this.state.username,
+      password: this.state.password
+    }
+    login(data)
       .then(this.props.setLoggedIn)
     event.preventDefault();
   }
@@ -44,20 +48,18 @@ class SigninForm extends React.Component {
   }
 }
 
-async function login(username, password) {
-  // Default options are marked with *
-  console.log(JSON.stringify({ username: username, password: password }))
+async function login(data) {
   const response = await fetch("http://localhost:1234/api/v1/sessions", {
     method: 'POST',
     mode: 'cors',
-    cache: 'no-cache',
+    cache: 'cache',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ username: username, password: password })
+    body: JSON.stringify(data)
   });
-  return response.json(); // parses JSON response into native JavaScript objects
+  return response.json();
 }
 
 export default SigninForm;
