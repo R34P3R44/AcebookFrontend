@@ -6,6 +6,7 @@ import SignUpForm from './SignUpForm.js';
 import './App.css'
 import * as Cookies from 'js-cookie';
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
