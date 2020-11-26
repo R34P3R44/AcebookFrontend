@@ -17,13 +17,12 @@ class PostList extends React.Component {
     console.log(token)
     fetch("http://localhost:1234/api/v1/posts", {
       method: 'GET',
-      mode: 'cors',
-      credentials: 'include',
-      header: {
+      headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
         Authorization: token
-      }
+      },
+      credentials: 'include'
     })
       .then(res => res.json())
       .then(
