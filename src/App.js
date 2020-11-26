@@ -3,46 +3,46 @@ import PostList from './PostList.js';
 import Header from './Header.js';
 import SigninForm from './SigninForm.js';
 import NewPostForm from './NewPostForm.js';
-import './App.css';
-const axios = require('axios').default;
-axios.defaults.xsrfCookieName = "CSRF-TOKEN";
-axios.defaults.xsrfHeaderName = "X-CSRF-Token";
-axios.defaults.withCredentials = true;
-
-let post1 = {
-  id: 1,
-  message: 'First post!',
-  username: 'ds.danielh',
-  created_at: '12/11/2020 12:31:32'
-}
-
-let post2 = {
-  id: 2,
-  message: 'This is my second post!',
-  username: 'ds.danielh',
-  created_at: '13/11/2020 12:31:32'
-}
+import './App.css'
+import * as Cookies from 'js-cookie';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      user: {
+        current: {},
+        valid: true,
+        authCompleted: false,
+        errors: {}
+      }
     };
 
     this.setLoggedIn = this.setLoggedIn.bind(this)
   }
 
-  setLoggedIn() {
+  setLoggedIn(jsonData) {
+    Cookies.remove('acebookSession');
+    Cookies.set('acebookSession', jsonData.token, { expires: 14 });
     this.setState({
-      loggedIn: true
+      loggedIn: true,
+      user: {
+        current: {
+          id: jsonData.body.user.id,
+          username: jsonData.body.user.username
+        },
+        valid: true,
+        authCompleted: true,
+        errors: {}
+      }
     })
   }
 
   render() {
     let postList = ''
     if (this.state.loggedIn) {
-      postList = <PostList posts={getPosts()} />
+      postList = <PostList />
     }
     return (
       <div className="App">
@@ -53,10 +53,6 @@ class App extends React.Component {
       </div>
     )
   }
-}
-
-function getPosts() {
-  return [post2, post1]
 }
 
 export default App;
