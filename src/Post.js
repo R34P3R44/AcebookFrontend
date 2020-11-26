@@ -8,12 +8,13 @@ class Post extends React.Component {
     this.state = {
       updated_post: '',
       editing: false,
-      id: null
+      post_id: this.props.data.id
     };
 
-    // this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.setId = this.setId.bind(this);
   }
 
   dateFormat(date) {
@@ -80,19 +81,28 @@ class Post extends React.Component {
     })
   }
 
-  // handleSubmit(event) {
-  //   event.preventDefault();
-  //   let data = {
-  //     updated_message: this.state.updated_message
-  //   }
-  //   let post_id = this.state.post_id
-  //   // updateMessage(data, post_id)
-  //   //   .then(this.setState({ updated_post: '' }))
-  //   //   .then(this.props.loadPosts)
-  // }
+  handleSubmit(event) {
+    event.preventDefault();
+    this.setId()
+    let data = {
+      message: this.state.updated_post
+    }
+    let current_post_id = this.state.post_id
+    console.log(current_post_id)
+    updateMessage(data, current_post_id)
+      .then(this.setState({ updated_post: '' }))
+      .then(this.props.loadPosts)
+  }
 
   handleChange(event) {
     this.setState({ updated_post: event.target.value });
+  }
+
+  setId(){
+    this.setState({ post_id: this.props.data.id })
+    console.log('and')
+    console.log(this.state.post_id)
+    console.log(this.props.data.id)
   }
 
   render() {
@@ -100,7 +110,6 @@ class Post extends React.Component {
     let delete_button = '';
     const post_id = this.props.data.id;
     let edit_link = "#posts/edit/" + post_id
-    // this.setState({ post_id: this.props.data.id})
 
     if (this.props.data.editable && this.props.user.authCompleted) {
       edit_button = <button onClick={this.handleClick} href={edit_link} type="button">Edit</button>
@@ -128,27 +137,28 @@ class Post extends React.Component {
       return (
         <form onSubmit={this.handleSubmit} id='new-post-form'>
           <textarea id="new-post-form-message" placeholder="Update old message here" name="message" type="text" value={this.state.updated_post} onChange={this.handleChange} />
-          <input id="new-post-form-submit" type="submit" value="Update" />
+          <input id="new-post-form-submit" href="#" type="submit" value="Update" />
         </form>
       );
     }
   }
 }
 
-// async function updateMessage(data, post_id) {
-//   let token = Cookies.get("acebookSession");
-//   const response = await fetch("http://localhost:1234/api/v1/posts" + post_id, {
-//     method: 'PUT',
-//     mode: 'cors',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       Accept: 'application/json',
-//       Authorization: token
-//     },
-//     credentials: 'include',
-//     body: JSON.stringify(data)
-//   });
-//   return response.json();
-// }
+async function updateMessage(data, post_id) {
+  let token = Cookies.get("acebookSession");
+  let httpRequest = "http://localhost:1234/api/v1/posts/" + post_id
+  const response = await fetch(httpRequest, {
+    method: 'PUT',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: token
+    },
+    credentials: 'include',
+    body: JSON.stringify(data)
+  });
+  return response.json();
+}
 
 export default Post;
