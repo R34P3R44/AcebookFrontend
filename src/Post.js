@@ -14,7 +14,6 @@ class Post extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.setId = this.setId.bind(this);
   }
 
   dateFormat(date) {
@@ -83,26 +82,20 @@ class Post extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setId()
     let data = {
       message: this.state.updated_post
     }
     let current_post_id = this.state.post_id
-    console.log(current_post_id)
     updateMessage(data, current_post_id)
-      .then(this.setState({ updated_post: '' }))
+      .then(this.setState({ 
+        updated_post: '',
+        editing: false
+      }))
       .then(this.props.loadPosts)
   }
 
   handleChange(event) {
     this.setState({ updated_post: event.target.value });
-  }
-
-  setId(){
-    this.setState({ post_id: this.props.data.id })
-    console.log('and')
-    console.log(this.state.post_id)
-    console.log(this.props.data.id)
   }
 
   render() {
