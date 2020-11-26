@@ -53,7 +53,6 @@ async function login(data) {
   const response = await fetch("http://localhost:1234/api/v1/sessions", {
     method: 'POST',
     mode: 'cors',
-    cache: 'cache',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json'

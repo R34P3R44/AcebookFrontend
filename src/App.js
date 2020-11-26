@@ -60,18 +60,18 @@ class App extends React.Component {
         .then(authResp => {
           if (authResp.valid === "true") {
             this.setState({
-              [user.valid]: true
+              valid: true
             })
           } else {
             this.setState({
-              [user.valid]: false
-            })          
+              valid: false
+            })
           }
         })
     } else {
-        this.setState({
-          [user.valid]: false
-        })
+      this.setState({
+        valid: false
+      })
     }
   }
 
