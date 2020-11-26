@@ -24,6 +24,7 @@ class App extends React.Component {
     this.authUser = this.authUser.bind(this)
     this.signOut = this.signOut.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.setSignedUp = this.setSignedUp.bind(this)
   }
 
   componentDidMount() {
@@ -43,6 +44,12 @@ class App extends React.Component {
         authCompleted: true,
         errors: {}
       }
+    })
+  }
+
+  setSignedUp(){
+    this.setState({
+      SigningUp: false
     })
   }
 
@@ -96,7 +103,6 @@ class App extends React.Component {
     this.setState({
       SigningUp: true
     })
-    // return <SignUpForm setSignedIn={this.setSignedIn} />
   }
 
   render() {
@@ -124,7 +130,7 @@ class App extends React.Component {
       return (
         <div className="App">
           <Header />
-          <SignUpForm setSignedIn={this.setSignedIn} />
+          <SignUpForm setSignedIn={this.setSignedIn} setSignedUp={this.setSignedUp}/>
         </div>
       )
     }

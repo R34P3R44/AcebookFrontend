@@ -33,12 +33,12 @@ class signUpForm extends React.Component {
     }
     signUp(data)
       .then(res => this.props.setSignedIn(res))
-      // may not work as may not inherit from app.js
+      .then(this.props.setSignedUp())
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} >
+      <form>
         <label>
           Username:
           <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
@@ -55,7 +55,7 @@ class signUpForm extends React.Component {
           Password:
           <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
         </label>
-        <input type="submit" value="Sign in" />
+        <button onClick={this.handleSubmit} href="#" type="button">Sign up</button>
       </form>
     )
   }
