@@ -11,10 +11,6 @@ class PostList extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.authUser()
-  }
-
   // componentDidMount() {
   //   fetch("http://localhost:1234/api/v1/posts",
   //   )
@@ -49,33 +45,4 @@ class PostList extends React.Component {
   }
 }
 
-function authUser() {
-  let token = Cookies.get("acebookSession")
-  return dispatch => {
-    dispatch({ type: "START_AUTH" })
-    if (token) {
-      const configObj = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          Authorization: token
-        },
-        credentials: 'include'
-      }
-      fetch(BASE_URL.concat('/authorize'), configObj)
-        .then(resp => resp.json())
-        .then(authResp => {
-          if (authResp.valid === "true") {
-            dispatch({ type: "LOGIN_USER", user: authResp.user })
-          } else {
-            dispatch({ type: "INVALID_USER", errors: { session: "Please login to continue" } })
-          }
-        })
-    } else {
-      dispatch({ type: "INVALID_USER", errors: { session: "Please login to continue" } })
-    }
-    dispatch({ type: "COMPLETE_AUTH" })
-  }
-
-  export default PostList;
+export default PostList;

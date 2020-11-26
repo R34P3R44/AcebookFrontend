@@ -20,13 +20,17 @@ class App extends React.Component {
     };
 
     this.setLoggedIn = this.setLoggedIn.bind(this)
+    this.authUser = this.authUser.bind(this)
+  }
+
+  componentDidMount() {
+    this.authUser()
   }
 
   setLoggedIn(jsonData) {
     Cookies.remove('acebookSession');
     Cookies.set('acebookSession', jsonData.token, { expires: 14 });
     this.setState({
-      loggedIn: true,
       user: {
         current: {
           id: jsonData.body.user.id,
@@ -39,9 +43,41 @@ class App extends React.Component {
     })
   }
 
+  authUser() {
+    let token = Cookies.get("acebookSession")
+    if (token) {
+      const configObj = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: token
+        },
+        credentials: 'include'
+      }
+      fetch("http://localhost:1234/api/v1/sessions/authorize", configObj)
+        .then(resp => resp.json())
+        .then(authResp => {
+          if (authResp.valid === "true") {
+            this.setState({
+              [user.valid]: true
+            })
+          } else {
+            this.setState({
+              [user.valid]: false
+            })          
+          }
+        })
+    } else {
+        this.setState({
+          [user.valid]: false
+        })
+    }
+  }
+
   render() {
     let postList = ''
-    if (this.state.loggedIn) {
+    if (this.state.user.authCompleted && this.state.user.valid) {
       postList = <PostList />
     }
     return (
