@@ -1,5 +1,4 @@
 import React from 'react';
-import * as Cookies from 'js-cookie';
 
 class SigninForm extends React.Component {
   constructor(props) {
@@ -23,13 +22,13 @@ class SigninForm extends React.Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault();
     let data = {
       username: this.state.username,
       password: this.state.password
     }
     login(data)
-      .then(res => setLoggedIn(res))
-    event.preventDefault();
+      .then(res => this.props.setLoggedIn(res))
   }
 
   render() {
@@ -60,10 +59,6 @@ async function login(data) {
     body: JSON.stringify(data)
   });
   return response.json();
-}
-
-function setCookies(jsonData) {
-
 }
 
 export default SigninForm;

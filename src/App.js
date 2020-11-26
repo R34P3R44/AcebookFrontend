@@ -28,13 +28,14 @@ class App extends React.Component {
   }
 
   setLoggedIn(jsonData) {
+    console.log(jsonData)
     Cookies.remove('acebookSession');
     Cookies.set('acebookSession', jsonData.token, { expires: 14 });
     this.setState({
       user: {
         current: {
-          id: jsonData.body.user.id,
-          username: jsonData.body.user.username
+          id: jsonData.user.id,
+          username: jsonData.user.username
         },
         valid: true,
         authCompleted: true,
@@ -77,6 +78,9 @@ class App extends React.Component {
 
   render() {
     let postList = ''
+    console.log(this.state.user.authCompleted)
+    console.log(this.state.user.valid)
+    console.log('--')
     if (this.state.user.authCompleted && this.state.user.valid) {
       postList = <PostList />
     }
