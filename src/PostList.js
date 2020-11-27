@@ -58,6 +58,7 @@ class PostList extends React.Component {
   }
 
   render() {
+    this.loadPosts()
     const { error, isLoaded, posts } = this.state;
     let newPostForm = '';
     if (this.props.user.authCompleted && this.props.user.valid) {
