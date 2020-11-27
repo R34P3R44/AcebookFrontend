@@ -9,7 +9,7 @@ class signInForm extends React.Component {
       password: ''
     }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.signIn = this.signIn.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -22,20 +22,34 @@ class signInForm extends React.Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  fetchParams() {
     let data = {
       username: this.state.username,
       password: this.state.password
     }
-    signIn(data)
+    return ({
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+  }
+
+  signIn(event) {
+    event.preventDefault();
+    fetch(`${BASE_URL}/api/v1/sessions`, this.fetchParams())
+      .then(res => res.json())
       .then(res => this.props.setUserData(res))
+      .catch(err => alert('Incorrect login'))
   }
 
   render() {
     return (
       <div id='sign-in-pane'>
-        <form onSubmit={this.handleSubmit} id="sign-in-form" >
+        <form onSubmit={this.signIn} id="sign-in-form" >
           <label>
             Username:
             <input className="sign-in-input" name="username" type="text" value={this.state.username} onChange={this.handleChange} />
@@ -50,19 +64,6 @@ class signInForm extends React.Component {
       </div>
     )
   }
-}
-
-async function signIn(data) {
-  const response = await fetch(`${BASE_URL}/api/v1/sessions`, {
-    method: 'POST',
-    mode: 'cors',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-  return response.json();
 }
 
 export default signInForm;

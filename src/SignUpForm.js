@@ -11,7 +11,7 @@ class signUpForm extends React.Component {
       password: ''
     }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.signUp = this.signUp.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -24,18 +24,30 @@ class signUpForm extends React.Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  fetchParams() {
     let data = {
       username: this.state.username,
       email: this.state.email,
       full_name: this.state.full_name,
       password: this.state.password
     }
-    signUp(data)
-      .then(res => this.props.setSignedIn(res))
-      .then(this.props.setSignedUp())
-      .catch(err => alert(`${data.error}`))
+    return ({
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+  }
+
+  signUp(event) {
+    event.preventDefault();
+    fetch(`${BASE_URL}/api/v1/users`, this.fetchParams())
+      .then(res => res.json())
+      .then(res => this.props.setUserData(res))
+      .catch(err => alert('Error with sign up'))
   }
 
   render() {
@@ -50,23 +62,10 @@ class signUpForm extends React.Component {
         <label htmlFor="password">Password:</label>
         <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
         <br /><br />
-        <button onClick={this.handleSubmit} href="#" type="button">Sign up</button>
+        <button onClick={this.signUp} href="#" type="button">Sign up</button>
       </form>
     )
   }
-}
-
-async function signUp(data) {
-  const response = await fetch(`${BASE_URL}/api/v1/users`, {
-    method: 'POST',
-    mode: 'cors',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  return response.json();
 }
 
 export default signUpForm;

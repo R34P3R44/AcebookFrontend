@@ -120,7 +120,7 @@ class App extends React.Component {
       return (
         <div className="App">
           <Header loadHomePage={this.loadHomePage} />
-          <SignUpForm setSignedIn={this.setSignedIn} loadHomePage={this.loadHomePage} />
+          <SignUpForm setUserData={this.setUserData} loadHomePage={this.loadHomePage} />
         </div>
       )
     } else {

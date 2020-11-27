@@ -20,17 +20,23 @@ class PostList extends React.Component {
     this.loadPosts()
   }
 
-  loadPosts() {
+  fetchParams() {
     let token = Cookies.get("acebookSession")
-    fetch(`${BASE_URL}/api/v1/posts`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: token
-      },
-      credentials: 'include'
-    })
+    return (
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: token
+        },
+        credentials: 'include'
+      }
+    )
+  }
+
+  loadPosts() {
+    fetch(`${BASE_URL}/api/v1/posts`, this.fetchParams)
       .then(res => res.json())
       .then(
         (result) => {
