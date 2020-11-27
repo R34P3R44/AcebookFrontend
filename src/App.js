@@ -127,8 +127,7 @@ class App extends React.Component {
       return (
         <div className="App">
           <Header loadHomePage={this.loadHomePage} />
-          <SignInForm setUserData={this.setUserData} />
-          <button onClick={this.loadSignUpForm}>Sign up</button>
+          <SignInForm setUserData={this.setUserData} loadSignUpForm={this.loadSignUpForm} />
           <PostList user={this.state.user} />
         </div>
       )

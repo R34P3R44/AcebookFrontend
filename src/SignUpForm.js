@@ -40,23 +40,16 @@ class signUpForm extends React.Component {
 
   render() {
     return (
-      <form>
-        <label>
-          Username:
-          <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
-        </label>
-        <label>
-          Email:
-          <input name="email" type="text" value={this.state.email} onChange={this.handleChange} />
-        </label>
-        <label>
-          Full name:
-          <input name="full_name" type="text" value={this.state.full_name} onChange={this.handleChange} />
-        </label>
-        <label>
-          Password:
-          <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
-        </label>
+      <form id="sign-up-form">
+        <label htmlFor="username">Username:</label>
+        <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
+        <label htmlFor="email">Email:</label>
+        <input name="email" type="text" value={this.state.email} onChange={this.handleChange} />
+        <label htmlFor="full_name">Full name:</label>
+        <input name="full_name" type="text" value={this.state.full_name} onChange={this.handleChange} />
+        <label htmlFor="password">Password:</label>
+        <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
+        <br /><br />
         <button onClick={this.handleSubmit} href="#" type="button">Sign up</button>
       </form>
     )

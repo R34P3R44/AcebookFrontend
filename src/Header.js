@@ -3,10 +3,6 @@ import React from 'react';
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loaded: true
-    }
-
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -19,7 +15,7 @@ class Header extends React.Component {
     return (
       <div className="header">
         <div className="logo">
-          <h1 onClick={this.handleClick} href="#">Acebook</h1>
+          <h1 onClick={this.handleClick}>Acebook</h1>
         </div>
       </div>
     )

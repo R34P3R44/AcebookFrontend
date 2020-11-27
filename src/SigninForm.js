@@ -34,17 +34,20 @@ class signInForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} >
-        <label>
-          Username:
-          <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
-        </label>
-        <label>
-          Password:
-          <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Sign in" />
-      </form>
+      <div id='sign-in-pane'>
+        <form onSubmit={this.handleSubmit} id="sign-in-form" >
+          <label>
+            Username:
+            <input className="sign-in-input" name="username" type="text" value={this.state.username} onChange={this.handleChange} />
+          </label>
+          <label>
+            Password:
+            <input className="sign-in-input" name="password" type="password" value={this.state.password} onChange={this.handleChange} />
+          </label>
+          <input type="submit" value="Sign in" />
+        </form>
+        <button onClick={this.props.loadSignUpForm}>Sign up</button>
+      </div>
     )
   }
 }
