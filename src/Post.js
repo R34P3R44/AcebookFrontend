@@ -7,16 +7,14 @@ class Post extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      updated_post: '',
+      updated_post: this.props.data.message,
       editing: false,
-      post_id: this.props.data.id,
-      post: ''
+      post_id: this.props.data.id
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.submitEdit = this.submitEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.show = this.show.bind(this);
+    this.loadEditForm = this.loadEditForm.bind(this);
   }
 
   dateFormat(date) {
@@ -37,23 +35,32 @@ class Post extends React.Component {
       .then(this.props.loadPosts)
   }
 
-  handleClick(e) {
+  loadEditForm(e) {
     e.preventDefault();
-    this.setState({
-      editing: true
-    })
-    this.show()
+    this.setState({ editing: true })
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    let data = {
-      message: this.state.updated_post
+  fetchParams() {
+    let data = { message: this.state.updated_post }
+    let token = Cookies.get("acebookSession");
+    return {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: token
+      },
+      credentials: 'include',
+      body: JSON.stringify(data)
     }
-    let current_post_id = this.state.post_id
-    updateMessage(data, current_post_id)
+  }
+
+  submitEdit(event) {
+    event.preventDefault();
+    let httpRequest = `${BASE_URL}/api/v1/posts/` + this.props.data.id
+    fetch(httpRequest, this.fetchParams())
       .then(this.setState({
-        updated_post: '',
         editing: false
       }))
       .then(this.props.loadPosts)
@@ -63,35 +70,12 @@ class Post extends React.Component {
     this.setState({ updated_post: event.target.value });
   }
 
-  show() {
-    let token = Cookies.get("acebookSession")
-    fetch(`${BASE_URL}/api/v1/posts/` + this.state.post_id, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: token
-      },
-      credentials: 'include',
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            post: result.message
-          });
-        })
-      .catch(err => console.log(err))
-  }
-
   render() {
     let edit_button = '';
     let delete_button = '';
-    // const post_id = this.props.data.id;
-    let edit_link = "#posts/edit/" + this.state.post_id
 
     if (this.props.data.editable && this.props.user.authCompleted) {
-      edit_button = <button onClick={this.handleClick} href={edit_link} type="button">Edit</button>
+      edit_button = <button onClick={this.loadEditForm} type="button">Edit</button>
     }
     if (this.props.data.owned_by && this.props.user.authCompleted) {
       delete_button = <button onClick={() => { this.delete(this.state.post_id) }}>Delete</button>
@@ -114,31 +98,13 @@ class Post extends React.Component {
       )
     } else {
       return (
-        <form onSubmit={this.handleSubmit} id='new-post-form'>
-          <textarea id="new-post-form-message" placeholder={this.state.post} name="message" type="text" value={this.state.updated_post} onChange={this.handleChange} />
-          <input id="new-post-form-submit" href="#" type="submit" value="Update" />
+        <form onSubmit={this.submitEdit} id='new-post-form'>
+          <textarea id="new-post-form-message" name="message" type="text" value={this.state.updated_post} onChange={this.handleChange} />
+          <input id="new-post-form-submit" type="submit" value="Update" />
         </form>
       );
     }
   }
 }
-
-async function updateMessage(data, post_id) {
-  let token = Cookies.get("acebookSession");
-  let httpRequest = `${BASE_URL}/api/v1/posts/` + post_id
-  const response = await fetch(httpRequest, {
-    method: 'PUT',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: token
-    },
-    credentials: 'include',
-    body: JSON.stringify(data)
-  });
-  return response.json();
-}
-
 
 export default Post;
