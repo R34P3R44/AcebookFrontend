@@ -34,7 +34,7 @@ class signUpForm extends React.Component {
     signUp(data)
       .then(res => this.props.setSignedIn(res))
       .then(this.props.setSignedUp())
-      .catch(err => alert(`${err}`))
+      .catch(err => alert(`${data.error}`))
   }
 
   render() {
