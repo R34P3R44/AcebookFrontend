@@ -101,7 +101,7 @@ class App extends React.Component {
     })
   }
 
-  handleClick(e) {
+  signUp(e) {
     e.preventDefault();
     this.setState({
       SigningUp: true
@@ -109,31 +109,30 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.state.SigningUp === false) {
-      let signInForm = '';
-      let signOutButton = '';
-      let signUpLink = '';
-      if (this.state.user.authCompleted && this.state.user.valid) {
-        signOutButton = <button onClick={this.signOut}>Sign out</button>
-      } else {
-        signInForm = <SignInForm setSignedIn={this.setSignedIn} />
-        signUpLink = <a href="#users/new" onClick={this.handleClick}>Sign up</a>
-      }
-
+    const signedIn = this.state.user.authCompleted && this.state.user.valid;
+    const signingUp = this.state.signingUp
+    if (signedIn) {
       return (
         <div className="App">
-          <Header />
-          {signInForm}
-          {signUpLink}
-          {signOutButton}
+          <Header setSignedUp={this.setSignedUp} />
+          <button onClick={this.signOut}>Sign out</button>
           <PostList user={this.state.user} />
+        </div>
+      )
+    } else if (signingUp) {
+      return (
+        <div className="App">
+          <Header setSignedUp={this.setSignedUp} />
+          <SignUpForm setSignedIn={this.setSignedIn} setSignedUp={this.setSignedUp} />
         </div>
       )
     } else {
       return (
         <div className="App">
           <Header setSignedUp={this.setSignedUp} />
-          <SignUpForm setSignedIn={this.setSignedIn} setSignedUp={this.setSignedUp} />
+          <SignInForm setSignedIn={this.setSignedIn} />
+          <button onClick={this.signUp}>Sign up</button>
+          <PostList user={this.state.user} />
         </div>
       )
     }
