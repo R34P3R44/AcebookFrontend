@@ -1,4 +1,5 @@
 import React from 'react';
+import 'config.js';
 
 class signUpForm extends React.Component {
   constructor(props) {
@@ -63,7 +64,7 @@ class signUpForm extends React.Component {
 }
 
 async function signUp(data) {
-  const response = await fetch("http://localhost:1234/api/v1/users", {
+  const response = await fetch(`${BASE_URL}/api/v1/users`, {
     method: 'POST',
     mode: 'cors',
     credentials: 'same-origin',

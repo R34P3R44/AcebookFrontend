@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
+import 'config.js';
 
 class NewPostForm extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class NewPostForm extends React.Component {
 
 async function postMessage(data) {
   let token = Cookies.get("acebookSession");
-  const response = await fetch("http://localhost:1234/api/v1/posts", {
+  const response = await fetch(`${BASE_URL}/api/v1/posts`, {
     method: 'POST',
     mode: 'cors',
     headers: {

@@ -5,6 +5,7 @@ import SignInForm from './SignInForm.js';
 import SignUpForm from './SignUpForm.js';
 import './App.css'
 import * as Cookies from 'js-cookie';
+import 'config.js';
 
 
 class App extends React.Component {
@@ -49,7 +50,7 @@ class App extends React.Component {
     })
   }
 
-  setSignedUp(){
+  setSignedUp() {
     this.setState({
       SigningUp: false
     })
@@ -67,7 +68,7 @@ class App extends React.Component {
         },
         credentials: 'include'
       }
-      fetch("http://localhost:1234/api/v1/sessions/authorize", configObj)
+      fetch(`${BASE_URL}/api/v1/sessions/authorize`, configObj)
         .then(resp => resp.json())
         .then(authResp => {
           if (authResp.valid === "true") {
@@ -108,7 +109,7 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.state.SigningUp === false){
+    if (this.state.SigningUp === false) {
       let signInForm = '';
       let signOutButton = '';
       let signUpLink = '';
@@ -131,8 +132,8 @@ class App extends React.Component {
     } else {
       return (
         <div className="App">
-          <Header setSignedUp={this.setSignedUp}/>
-          <SignUpForm setSignedIn={this.setSignedIn} setSignedUp={this.setSignedUp}/>
+          <Header setSignedUp={this.setSignedUp} />
+          <SignUpForm setSignedIn={this.setSignedIn} setSignedUp={this.setSignedUp} />
         </div>
       )
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import Post from './Post.js';
 import NewPostForm from './NewPostForm.js';
 import * as Cookies from 'js-cookie';
+import 'config.js';
 
 class PostList extends React.Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class PostList extends React.Component {
 
   loadPosts() {
     let token = Cookies.get("acebookSession")
-    fetch("http://localhost:1234/api/v1/posts", {
+    fetch(`${BASE_URL}/api/v1/posts`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
+import 'config.js';
 
 
 class Post extends React.Component {
@@ -24,7 +25,7 @@ class Post extends React.Component {
 
   delete() {
     let token = Cookies.get("acebookSession")
-    fetch("http://localhost:1234/api/v1/posts/" + this.state.post_id, {
+    fetch(`${BASE_URL}/api/v1/posts/` + this.state.post_id, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -51,7 +52,7 @@ class Post extends React.Component {
     }
     let current_post_id = this.state.post_id
     updateMessage(data, current_post_id)
-      .then(this.setState({ 
+      .then(this.setState({
         updated_post: '',
         editing: false
       }))
@@ -64,7 +65,7 @@ class Post extends React.Component {
 
   show() {
     let token = Cookies.get("acebookSession")
-    fetch("http://localhost:1234/api/v1/posts/" + this.state.post_id, {
+    fetch(`${BASE_URL}/api/v1/posts/` + this.state.post_id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ class Post extends React.Component {
           });
         })
       .catch(err => console.log(err))
-    }
+  }
 
   render() {
     let edit_button = '';
@@ -95,7 +96,7 @@ class Post extends React.Component {
     if (this.props.data.owned_by && this.props.user.authCompleted) {
       delete_button = <button onClick={() => { this.delete(this.state.post_id) }}>Delete</button>
     }
-    if (this.state.editing === false){
+    if (this.state.editing === false) {
       return (
         <div className="post">
           <div className="post-info">
@@ -124,7 +125,7 @@ class Post extends React.Component {
 
 async function updateMessage(data, post_id) {
   let token = Cookies.get("acebookSession");
-  let httpRequest = "http://localhost:1234/api/v1/posts/" + post_id
+  let httpRequest = `${BASE_URL}/api/v1/posts/` + post_id
   const response = await fetch(httpRequest, {
     method: 'PUT',
     mode: 'cors',
