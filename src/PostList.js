@@ -36,8 +36,10 @@ class PostList extends React.Component {
   }
 
   loadPosts() {
+    console.log('loading posts')
     fetch(`${BASE_URL}/api/v1/posts`, this.fetchParams)
       .then(res => res.json())
+      .then(res => console.log(res))
       .then(
         (result) => {
           this.setState({
