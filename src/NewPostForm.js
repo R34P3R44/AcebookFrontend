@@ -36,7 +36,7 @@ class NewPostForm extends React.Component {
     fetch(`${BASE_URL}/api/v1/posts`, this.fetchParams())
       .then((res) => { console.log(res) })
       .then(this.setState({ message: '' }))
-      .then(this.props.loadPosts)
+      .then(this.props.loadPosts())
   }
 
   render() {
