@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Cookies from 'js-cookie';
 
 class NewPostForm extends React.Component {
   constructor(props) {
@@ -14,8 +15,13 @@ class NewPostForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert(`A post was submitted: ${this.state.message}`);
     event.preventDefault();
+    let data = {
+      message: this.state.message
+    }
+    postMessage(data)
+      .then(this.setState({ message: '' }))
+      .then(this.props.loadPosts)
   }
 
   render() {
@@ -26,6 +32,22 @@ class NewPostForm extends React.Component {
       </form>
     );
   }
+}
+
+async function postMessage(data) {
+  let token = Cookies.get("acebookSession");
+  const response = await fetch("http://localhost:1234/api/v1/posts", {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: token
+    },
+    credentials: 'include',
+    body: JSON.stringify(data)
+  });
+  return response.json();
 }
 
 export default NewPostForm;
