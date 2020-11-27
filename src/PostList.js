@@ -22,6 +22,7 @@ class PostList extends React.Component {
 
   fetchParams() {
     let token = Cookies.get("acebookSession")
+    console.log(token)
     return (
       {
         method: 'GET',
