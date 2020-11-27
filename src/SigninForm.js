@@ -29,7 +29,7 @@ class signInForm extends React.Component {
       password: this.state.password
     }
     signIn(data)
-      .then(res => this.props.setSignedIn(res))
+      .then(res => this.props.setUserData(res))
   }
 
   render() {
