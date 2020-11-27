@@ -45,8 +45,6 @@ class PostList extends React.Component {
             isLoaded: true,
             posts: result.posts
           });
-          console.log(result);
-          console.log(this.props.user);
         }
       )
       .catch(err => console.log(err))
@@ -60,6 +58,8 @@ class PostList extends React.Component {
 
   render() {
     const { error, isLoaded, posts } = this.state;
+    console.log(posts);
+    console.log(this.props.user)
     let newPostForm = '';
     if (this.props.user.authCompleted && this.props.user.valid) {
       newPostForm = <NewPostForm loadPosts={this.loadPosts} />
