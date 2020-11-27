@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
-import 'config.js';
+import BASE_URL from './config.js';
 
 
 class Post extends React.Component {

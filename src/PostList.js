@@ -2,7 +2,7 @@ import React from 'react';
 import Post from './Post.js';
 import NewPostForm from './NewPostForm.js';
 import * as Cookies from 'js-cookie';
-import 'config.js';
+import BASE_URL from './config.js';
 
 class PostList extends React.Component {
   constructor(props) {

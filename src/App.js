@@ -1,11 +1,11 @@
 import React from 'react';
 import PostList from './PostList.js';
 import Header from './Header.js';
-import SignInForm from './SignInForm.js';
+import SignInForm from './SigninForm.js';
 import SignUpForm from './SignUpForm.js';
 import './App.css'
 import * as Cookies from 'js-cookie';
-import 'config.js';
+import BASE_URL from './config.js';
 
 
 class App extends React.Component {

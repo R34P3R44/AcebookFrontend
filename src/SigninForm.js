@@ -1,5 +1,5 @@
 import React from 'react';
-import 'config.js';
+import BASE_URL from './config.js';
 
 class signInForm extends React.Component {
   constructor(props) {
