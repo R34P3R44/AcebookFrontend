@@ -34,6 +34,7 @@ class signUpForm extends React.Component {
     signUp(data)
       .then(res => this.props.setSignedIn(res))
       .then(this.props.setSignedUp())
+      .catch(err => alert(`${err}`))
   }
 
   render() {
@@ -70,7 +71,7 @@ async function signUp(data) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
-  });
+  })
   return response.json();
 }
 

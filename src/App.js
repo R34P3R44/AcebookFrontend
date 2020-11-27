@@ -33,6 +33,7 @@ class App extends React.Component {
   }
 
   setSignedIn(jsonData) {
+    console.log(jsonData)
     Cookies.remove('acebookSession');
     Cookies.set('acebookSession', jsonData.token, { expires: 14 });
     this.setState({
@@ -130,7 +131,7 @@ class App extends React.Component {
     } else {
       return (
         <div className="App">
-          <Header />
+          <Header setSignedUp={this.setSignedUp}/>
           <SignUpForm setSignedIn={this.setSignedIn} setSignedUp={this.setSignedUp}/>
         </div>
       )
