@@ -8,6 +8,7 @@ class PostList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      awaitingResults: false,
       error: null,
       loadedFor: false,
       posts: []
@@ -36,13 +37,17 @@ class PostList extends React.Component {
   }
 
   loadPosts() {
+    this.setState({
+      awaitingResults: true
+    })
     fetch(`${BASE_URL}/api/v1/posts`, this.fetchParams())
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
             loadedFor: this.props.user.current.id,
-            posts: result.posts
+            posts: result.posts,
+            awaitingResults: false
           });
         }
       )
@@ -53,7 +58,9 @@ class PostList extends React.Component {
     const { error, loadedFor, posts } = this.state;
     console.log(this.state.loadedFor);
     console.log(this.props.user.current.id);
-    if (this.state.loadedFor !== this.props.user.current.id) { this.loadPosts() }
+    if (this.state.loadedFor !== this.props.user.current.id && !this.state.awaitingResults) {
+      this.loadPosts()
+    }
     let newPostForm = '';
     if (this.props.user.authCompleted && this.props.user.valid) {
       newPostForm = <NewPostForm loadPosts={this.loadPosts} />
