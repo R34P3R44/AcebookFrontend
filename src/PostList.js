@@ -46,6 +46,7 @@ class PostList extends React.Component {
             posts: result.posts
           });
           console.log(result);
+          console.log(this.props.user);
         }
       )
       .catch(err => console.log(err))
@@ -58,7 +59,6 @@ class PostList extends React.Component {
   }
 
   render() {
-    this.loadPosts()
     const { error, isLoaded, posts } = this.state;
     let newPostForm = '';
     if (this.props.user.authCompleted && this.props.user.valid) {
