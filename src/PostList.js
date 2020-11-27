@@ -58,7 +58,7 @@ class PostList extends React.Component {
     }
     if (error) {
       return <div>Error: {error.message}</div>;
-    } else if (!loadedFor) {
+    } else if (loadedFor === false) {
       return <div>Loading...</div>
     } else {
       return (
