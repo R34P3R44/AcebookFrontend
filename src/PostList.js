@@ -9,7 +9,7 @@ class PostList extends React.Component {
     super(props);
     this.state = {
       error: null,
-      isLoaded: false,
+      loadedFor: false,
       posts: []
     };
 
@@ -22,7 +22,6 @@ class PostList extends React.Component {
 
   fetchParams() {
     let token = Cookies.get("acebookSession")
-    console.log(token)
     return (
       {
         method: 'GET',
@@ -37,13 +36,12 @@ class PostList extends React.Component {
   }
 
   loadPosts() {
-    console.log('loading posts')
     fetch(`${BASE_URL}/api/v1/posts`, this.fetchParams())
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
-            isLoaded: true,
+            loadedFor: this.props.user.id,
             posts: result.posts
           });
         }
@@ -51,23 +49,16 @@ class PostList extends React.Component {
       .catch(err => console.log(err))
   }
 
-  setLoaded(value) {
-    this.setState({
-      isLoaded: value
-    })
-  }
-
   render() {
-    const { error, isLoaded, posts } = this.state;
-    console.log(posts);
-    console.log(this.props.user)
+    const { error, loadedFor, posts } = this.state;
+    if (this.state.loadedFor != this.props.user.id) { this.loadPosts() }
     let newPostForm = '';
     if (this.props.user.authCompleted && this.props.user.valid) {
       newPostForm = <NewPostForm loadPosts={this.loadPosts} />
     }
     if (error) {
       return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
+    } else if (!loadedFor) {
       return <div>Loading...</div>
     } else {
       return (
