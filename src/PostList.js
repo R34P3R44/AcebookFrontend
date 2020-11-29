@@ -22,7 +22,6 @@ class PostList extends React.Component {
   }
 
   loadPosts() {
-    console.log('Loading posts')
     this.setState({
       loaded: false
     })
