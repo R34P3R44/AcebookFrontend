@@ -8,9 +8,9 @@ class PostList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      awaitingResults: false,
       error: null,
-      loadedFor: false,
+      loaded: false,
+      loadedFor: null,
       posts: []
     };
 
@@ -22,8 +22,9 @@ class PostList extends React.Component {
   }
 
   loadPosts() {
+    console.log('Loading posts')
     this.setState({
-      awaitingResults: true
+      loaded: false
     })
     fetch(`${BASE_URL}/api/v1/posts`, this._fetchParams())
       .then(res => res.json())
@@ -32,7 +33,7 @@ class PostList extends React.Component {
           this.setState({
             loadedFor: this.props.user.current.id,
             posts: result.posts,
-            awaitingResults: false
+            loaded: true
           });
         }
       )
@@ -54,18 +55,25 @@ class PostList extends React.Component {
     )
   }
 
-  render() {
-    const { error, loadedFor, posts } = this.state;
-    if (this.state.loadedFor !== this.props.user.current.id && !this.state.awaitingResults) {
+  componentDidUpdate() {
+    let loaded = this.state.loaded
+    let loadedForCurrentUser = this.state.loadedFor === this.props.user.current.id;
+    if (loaded && !loadedForCurrentUser) {
       this.loadPosts()
     }
+  }
+
+  render() {
+    const loaded = this.state.loaded;
+    const error = this.state.error;
+    const posts = this.state.posts;
     let newPostForm = '';
     if (this.props.user.authCompleted && this.props.user.valid) {
       newPostForm = <NewPostForm loadPosts={this.loadPosts} />
     }
     if (error) {
       return <div>Error: {error.message}</div>;
-    } else if (loadedFor === false) {
+    } else if (!loaded) {
       return <div>Loading...</div>
     } else {
       return (
