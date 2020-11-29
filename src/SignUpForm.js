@@ -11,7 +11,7 @@ class signUpForm extends React.Component {
       password: ''
     }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.signUp = this.signUp.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -24,56 +24,48 @@ class signUpForm extends React.Component {
     });
   }
 
-  handleSubmit(event) {
+  signUp(event) {
     event.preventDefault();
+    fetch(`${BASE_URL}/api/v1/users`, this._fetchParams())
+      .then(res => res.json())
+      .then(res => this.props.setUserData(res))
+      .catch(err => alert('Error with sign up'))
+  }
+
+  _fetchParams() {
     let data = {
       username: this.state.username,
       email: this.state.email,
       full_name: this.state.full_name,
       password: this.state.password
     }
-    signUp(data)
-      .then(res => this.props.setSignedIn(res))
-      .then(this.props.setSignedUp())
-      .catch(err => alert(`${data.error}`))
+    return ({
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
   }
 
   render() {
     return (
-      <form>
-        <label>
-          Username:
-          <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
-        </label>
-        <label>
-          Email:
-          <input name="email" type="text" value={this.state.email} onChange={this.handleChange} />
-        </label>
-        <label>
-          Full name:
-          <input name="full_name" type="text" value={this.state.full_name} onChange={this.handleChange} />
-        </label>
-        <label>
-          Password:
-          <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
-        </label>
-        <button onClick={this.handleSubmit} href="#" type="button">Sign up</button>
+      <form id="sign-up-form">
+        <label htmlFor="username">Username:</label>
+        <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
+        <label htmlFor="email">Email:</label>
+        <input name="email" type="text" value={this.state.email} onChange={this.handleChange} />
+        <label htmlFor="full_name">Full name:</label>
+        <input name="full_name" type="text" value={this.state.full_name} onChange={this.handleChange} />
+        <label htmlFor="password">Password:</label>
+        <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
+        <br /><br />
+        <button onClick={this.signUp} href="#" type="button">Sign up</button>
       </form>
     )
   }
-}
-
-async function signUp(data) {
-  const response = await fetch(`${BASE_URL}/api/v1/users`, {
-    method: 'POST',
-    mode: 'cors',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  return response.json();
 }
 
 export default signUpForm;

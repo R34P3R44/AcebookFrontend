@@ -12,8 +12,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      SignedIn: false,
-      SigningUp: false,
+      signingUp: false,
       user: {
         current: {},
         valid: true,
@@ -22,38 +21,15 @@ class App extends React.Component {
       }
     };
 
-    this.setSignedIn = this.setSignedIn.bind(this)
     this.authUser = this.authUser.bind(this)
+    this.setUserData = this.setUserData.bind(this)
     this.signOut = this.signOut.bind(this)
-    this.handleClick = this.handleClick.bind(this)
-    this.setSignedUp = this.setSignedUp.bind(this)
+    this.loadSignUpForm = this.loadSignUpForm.bind(this)
+    this.loadHomePage = this.loadHomePage.bind(this)
   }
 
   componentDidMount() {
     this.authUser()
-  }
-
-  setSignedIn(jsonData) {
-    console.log(jsonData)
-    Cookies.remove('acebookSession');
-    Cookies.set('acebookSession', jsonData.token, { expires: 14 });
-    this.setState({
-      user: {
-        current: {
-          id: jsonData.user.id,
-          username: jsonData.user.username
-        },
-        valid: true,
-        authCompleted: true,
-        errors: {}
-      }
-    })
-  }
-
-  setSignedUp() {
-    this.setState({
-      SigningUp: false
-    })
   }
 
   authUser() {
@@ -88,10 +64,25 @@ class App extends React.Component {
     }
   }
 
+  setUserData(jsonData) {
+    Cookies.remove('acebookSession');
+    Cookies.set('acebookSession', jsonData.token, { expires: 14 });
+    this.setState({
+      user: {
+        current: {
+          id: jsonData.user.id,
+          username: jsonData.user.username
+        },
+        valid: true,
+        authCompleted: true,
+        errors: {}
+      }
+    })
+  }
+
   signOut() {
     Cookies.remove('acebookSession');
     this.setState({
-      SignedIn: false,
       user: {
         current: {},
         valid: true,
@@ -101,39 +92,43 @@ class App extends React.Component {
     })
   }
 
-  handleClick(e) {
+  loadHomePage() {
+    this.setState({
+      signingUp: false
+    })
+  }
+
+  loadSignUpForm(e) {
     e.preventDefault();
     this.setState({
-      SigningUp: true
+      signingUp: true
     })
   }
 
   render() {
-    if (this.state.SigningUp === false) {
-      let signInForm = '';
-      let signOutButton = '';
-      let signUpLink = '';
-      if (this.state.user.authCompleted && this.state.user.valid) {
-        signOutButton = <button onClick={this.signOut}>Sign out</button>
-      } else {
-        signInForm = <SignInForm setSignedIn={this.setSignedIn} />
-        signUpLink = <a href="#users/new" onClick={this.handleClick}>Sign up</a>
-      }
-
+    const signedIn = this.state.user.authCompleted && this.state.user.valid;
+    const signingUp = this.state.signingUp
+    if (signedIn) {
       return (
         <div className="App">
-          <Header />
-          {signInForm}
-          {signUpLink}
-          {signOutButton}
+          <Header loadHomePage={this.loadHomePage} />
+          <button onClick={this.signOut}>Sign out</button>
           <PostList user={this.state.user} />
+        </div>
+      )
+    } else if (signingUp) {
+      return (
+        <div className="App">
+          <Header loadHomePage={this.loadHomePage} />
+          <SignUpForm setUserData={this.setUserData} loadHomePage={this.loadHomePage} />
         </div>
       )
     } else {
       return (
         <div className="App">
-          <Header setSignedUp={this.setSignedUp} />
-          <SignUpForm setSignedIn={this.setSignedIn} setSignedUp={this.setSignedUp} />
+          <Header loadHomePage={this.loadHomePage} />
+          <SignInForm setUserData={this.setUserData} loadSignUpForm={this.loadSignUpForm} />
+          <PostList user={this.state.user} />
         </div>
       )
     }

@@ -8,47 +8,44 @@ class NewPostForm extends React.Component {
     this.state = { message: '' };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.submitPost = this.submitPost.bind(this);
   }
 
   handleChange(event) {
     this.setState({ message: event.target.value });
   }
 
-  handleSubmit(event) {
+  submitPost(event) {
     event.preventDefault();
-    let data = {
-      message: this.state.message
-    }
-    postMessage(data)
+    fetch(`${BASE_URL}/api/v1/posts`, this._fetchParams())
       .then(this.setState({ message: '' }))
-      .then(this.props.loadPosts)
+      .then(res => this.props.loadPosts())
+  }
+
+  _fetchParams() {
+    let data = { message: this.state.message }
+    let token = Cookies.get("acebookSession");
+    return {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: token
+      },
+      credentials: 'include',
+      body: JSON.stringify(data)
+    }
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} id='new-post-form'>
+      <form onSubmit={this.submitPost} id='new-post-form'>
         <textarea id="new-post-form-message" placeholder="What's on your mind?" name="message" type="text" value={this.state.message} onChange={this.handleChange} />
         <input id="new-post-form-submit" type="submit" value="Post" />
       </form>
     );
   }
-}
-
-async function postMessage(data) {
-  let token = Cookies.get("acebookSession");
-  const response = await fetch(`${BASE_URL}/api/v1/posts`, {
-    method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: token
-    },
-    credentials: 'include',
-    body: JSON.stringify(data)
-  });
-  return response.json();
 }
 
 export default NewPostForm;

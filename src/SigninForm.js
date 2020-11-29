@@ -9,7 +9,7 @@ class signInForm extends React.Component {
       password: ''
     }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.signIn = this.signIn.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -22,44 +22,48 @@ class signInForm extends React.Component {
     });
   }
 
-  handleSubmit(event) {
+  signIn(event) {
     event.preventDefault();
+    fetch(`${BASE_URL}/api/v1/sessions`, this._fetchParams())
+      .then(res => res.json())
+      .then(res => this.props.setUserData(res))
+      .catch(err => alert('Incorrect login'))
+  }
+
+  _fetchParams() {
     let data = {
       username: this.state.username,
       password: this.state.password
     }
-    signIn(data)
-      .then(res => this.props.setSignedIn(res))
+    return ({
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} >
-        <label>
-          Username:
-          <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
-        </label>
-        <label>
-          Password:
-          <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Sign in" />
-      </form>
+      <div id='sign-in-pane'>
+        <form onSubmit={this.signIn} id="sign-in-form" >
+          <label>
+            Username:
+            <input className="sign-in-input" name="username" type="text" value={this.state.username} onChange={this.handleChange} />
+          </label>
+          <label>
+            Password:
+            <input className="sign-in-input" name="password" type="password" value={this.state.password} onChange={this.handleChange} />
+          </label>
+          <input type="submit" value="Sign in" />
+        </form>
+        <button onClick={this.props.loadSignUpForm}>Sign up</button>
+      </div>
     )
   }
-}
-
-async function signIn(data) {
-  const response = await fetch(`${BASE_URL}/api/v1/sessions`, {
-    method: 'POST',
-    mode: 'cors',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-  return response.json();
 }
 
 export default signInForm;

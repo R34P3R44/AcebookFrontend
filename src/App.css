@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  width: 600px;
+  margin: auto;
 }
 
 label {
@@ -16,8 +18,6 @@ label {
   background-color: lightblue;
   border-style: solid;
   border-width: 1px;
-  width: 600px;
-  margin: auto;
   margin-top: 10px;
   margin-bottom: 10px;
   text-align:left;
@@ -38,6 +38,32 @@ label {
 
 .post-message {
   padding: 5px;
+}
+
+#sign-in-form {
+  width: 500px;
+  float: left;
+}
+
+#sign-up-form {
+  width: 300px;
+  margin: auto;
+}
+
+#sign-up-form label {
+  display: block;
+  text-align: left;
+}
+
+/*
+#sign-up-form input{
+  display: block;
+} */
+
+.sign-in-input {
+  width: 120px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 #new-post-form {

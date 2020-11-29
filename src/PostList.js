@@ -9,7 +9,8 @@ class PostList extends React.Component {
     super(props);
     this.state = {
       error: null,
-      isLoaded: false,
+      loaded: false,
+      loadedFor: null,
       posts: []
     };
 
@@ -21,43 +22,57 @@ class PostList extends React.Component {
   }
 
   loadPosts() {
-    let token = Cookies.get("acebookSession")
-    fetch(`${BASE_URL}/api/v1/posts`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: token
-      },
-      credentials: 'include'
+    this.setState({
+      loaded: false
     })
+    fetch(`${BASE_URL}/api/v1/posts`, this._fetchParams())
       .then(res => res.json())
       .then(
         (result) => {
           this.setState({
-            isLoaded: true,
-            posts: result.posts
+            loadedFor: this.props.user.current.id,
+            posts: result.posts,
+            loaded: true
           });
         }
       )
       .catch(err => console.log(err))
   }
 
-  setLoaded(value) {
-    this.setState({
-      isLoaded: value
-    })
+  _fetchParams() {
+    let token = Cookies.get("acebookSession")
+    return (
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: token
+        },
+        credentials: 'include'
+      }
+    )
+  }
+
+  componentDidUpdate() {
+    let loaded = this.state.loaded
+    let loadedForCurrentUser = this.state.loadedFor === this.props.user.current.id;
+    if (loaded && !loadedForCurrentUser) {
+      this.loadPosts()
+    }
   }
 
   render() {
-    const { error, isLoaded, posts } = this.state;
+    const loaded = this.state.loaded;
+    const error = this.state.error;
+    const posts = this.state.posts;
     let newPostForm = '';
     if (this.props.user.authCompleted && this.props.user.valid) {
       newPostForm = <NewPostForm loadPosts={this.loadPosts} />
     }
     if (error) {
       return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
+    } else if (!loaded) {
       return <div>Loading...</div>
     } else {
       return (
