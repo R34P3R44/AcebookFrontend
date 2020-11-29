@@ -21,7 +21,25 @@ class PostList extends React.Component {
     this.loadPosts()
   }
 
-  fetchParams() {
+  loadPosts() {
+    this.setState({
+      awaitingResults: true
+    })
+    fetch(`${BASE_URL}/api/v1/posts`, this._fetchParams())
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            loadedFor: this.props.user.current.id,
+            posts: result.posts,
+            awaitingResults: false
+          });
+        }
+      )
+      .catch(err => console.log(err))
+  }
+
+  _fetchParams() {
     let token = Cookies.get("acebookSession")
     return (
       {
@@ -36,28 +54,8 @@ class PostList extends React.Component {
     )
   }
 
-  loadPosts() {
-    this.setState({
-      awaitingResults: true
-    })
-    fetch(`${BASE_URL}/api/v1/posts`, this.fetchParams())
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            loadedFor: this.props.user.current.id,
-            posts: result.posts,
-            awaitingResults: false
-          });
-        }
-      )
-      .catch(err => console.log(err))
-  }
-
   render() {
     const { error, loadedFor, posts } = this.state;
-    console.log(this.state.loadedFor);
-    console.log(this.props.user.current.id);
     if (this.state.loadedFor !== this.props.user.current.id && !this.state.awaitingResults) {
       this.loadPosts()
     }

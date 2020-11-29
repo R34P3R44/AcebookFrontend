@@ -22,7 +22,15 @@ class signInForm extends React.Component {
     });
   }
 
-  fetchParams() {
+  signIn(event) {
+    event.preventDefault();
+    fetch(`${BASE_URL}/api/v1/sessions`, this._fetchParams())
+      .then(res => res.json())
+      .then(res => this.props.setUserData(res))
+      .catch(err => alert('Incorrect login'))
+  }
+
+  _fetchParams() {
     let data = {
       username: this.state.username,
       password: this.state.password
@@ -36,14 +44,6 @@ class signInForm extends React.Component {
       },
       body: JSON.stringify(data)
     })
-  }
-
-  signIn(event) {
-    event.preventDefault();
-    fetch(`${BASE_URL}/api/v1/sessions`, this.fetchParams())
-      .then(res => res.json())
-      .then(res => this.props.setUserData(res))
-      .catch(err => alert('Incorrect login'))
   }
 
   render() {

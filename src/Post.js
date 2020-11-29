@@ -40,7 +40,21 @@ class Post extends React.Component {
     this.setState({ editing: true })
   }
 
-  fetchParams() {
+  submitEdit(event) {
+    event.preventDefault();
+    let httpRequest = `${BASE_URL}/api/v1/posts/` + this.state.post_id
+    fetch(httpRequest, this._fetchParams())
+      .then(this.setState({
+        editing: false
+      }))
+      .then(this.props.loadPosts)
+  }
+
+  handleChange(event) {
+    this.setState({ updated_post: event.target.value });
+  }
+
+  _fetchParams() {
     let data = { message: this.state.updated_post }
     let token = Cookies.get("acebookSession");
     return {
@@ -56,28 +70,16 @@ class Post extends React.Component {
     }
   }
 
-  submitEdit(event) {
-    event.preventDefault();
-    let httpRequest = `${BASE_URL}/api/v1/posts/` + this.props.data.id
-    fetch(httpRequest, this.fetchParams())
-      .then(this.setState({
-        editing: false
-      }))
-      .then(this.props.loadPosts)
-  }
-
-  handleChange(event) {
-    this.setState({ updated_post: event.target.value });
-  }
-
   render() {
     let edit_button = '';
     let delete_button = '';
+    let editable = this.props.data.editable && this.props.user.authCompleted;
+    let owned_by = this.props.data.owned_by && this.props.user.authCompleted
 
-    if (this.props.data.editable && this.props.user.authCompleted) {
+    if (editable) {
       edit_button = <button onClick={this.loadEditForm} type="button">Edit</button>
     }
-    if (this.props.data.owned_by && this.props.user.authCompleted) {
+    if (owned_by) {
       delete_button = <button onClick={() => { this.delete(this.state.post_id) }}>Delete</button>
     }
     if (this.state.editing === false) {

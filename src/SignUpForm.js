@@ -24,7 +24,15 @@ class signUpForm extends React.Component {
     });
   }
 
-  fetchParams() {
+  signUp(event) {
+    event.preventDefault();
+    fetch(`${BASE_URL}/api/v1/users`, this._fetchParams())
+      .then(res => res.json())
+      .then(res => this.props.setUserData(res))
+      .catch(err => alert('Error with sign up'))
+  }
+
+  _fetchParams() {
     let data = {
       username: this.state.username,
       email: this.state.email,
@@ -40,14 +48,6 @@ class signUpForm extends React.Component {
       },
       body: JSON.stringify(data)
     })
-  }
-
-  signUp(event) {
-    event.preventDefault();
-    fetch(`${BASE_URL}/api/v1/users`, this.fetchParams())
-      .then(res => res.json())
-      .then(res => this.props.setUserData(res))
-      .catch(err => alert('Error with sign up'))
   }
 
   render() {

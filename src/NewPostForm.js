@@ -15,7 +15,14 @@ class NewPostForm extends React.Component {
     this.setState({ message: event.target.value });
   }
 
-  fetchParams() {
+  submitPost(event) {
+    event.preventDefault();
+    fetch(`${BASE_URL}/api/v1/posts`, this._fetchParams())
+      .then(this.setState({ message: '' }))
+      .then(res => this.props.loadPosts())
+  }
+
+  _fetchParams() {
     let data = { message: this.state.message }
     let token = Cookies.get("acebookSession");
     return {
@@ -29,13 +36,6 @@ class NewPostForm extends React.Component {
       credentials: 'include',
       body: JSON.stringify(data)
     }
-  }
-
-  submitPost(event) {
-    event.preventDefault();
-    fetch(`${BASE_URL}/api/v1/posts`, this.fetchParams())
-      .then(this.setState({ message: '' }))
-      .then(res => this.props.loadPosts())
   }
 
   render() {
