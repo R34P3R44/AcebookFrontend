@@ -2,6 +2,10 @@
 Acebook is a frontend social media static webpage application. Acebook enables non-signed in users to view all posts, sign in and sign up. Once signed in, the user can write a post, edit and delete their own post and sign out.
 For a compatible rails backend application, checkout [this Acebook backend](https://github.com/dan-holmes/acebook-District-13).
 
+A live version of this web app can be found [here](https://acebook-frontend-six.vercel.app/).
+
+![Acebook Screenshot](https://i.imgur.com/91ZFzVb.png)
+
 ## Set up
 1) Fork and clone this repository.
 2) In your terminal run:
